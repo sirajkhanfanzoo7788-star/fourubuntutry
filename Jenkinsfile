@@ -49,17 +49,17 @@ pipeline {
                     retry(2) {
                         sh """
                             echo "Updating kubeconfig..."
-                            aws eks update-kubeconfig --region us-east-1 --name test-cluster
+                            aws eks update-kubeconfig --region us-east-1 --name siraj-cluster
 
                             echo "Applying Kubernetes manifests..."
                             kubectl apply -f deployment.yaml
                             kubectl apply -f service.yaml
 
                             echo "Auto-updating app with new image..."
-                            kubectl set image deployment/awsubuntu-app awsubuntu=${IMAGE_TAG}
+                            kubectl set image deployment/ fourubuntutry-app fourubuntutry=${IMAGE_TAG}
 
                             echo "Waiting for rollout to finish..."
-                            kubectl rollout status deployment/awsubuntu-app --timeout=180s
+                            kubectl rollout status deployment/ fourubuntutry-app --timeout=180s
                         """
                     }
                 }
