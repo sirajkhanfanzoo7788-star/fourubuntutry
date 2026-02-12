@@ -6,7 +6,7 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app:fourubuntu
+      app: fourubuntu          # <--- space after colon
   template:
     metadata:
       labels:
