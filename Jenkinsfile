@@ -3,12 +3,12 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'sirajahmad77/fourubuntutry'
-        IMAGE_TAG  = "${IMAGE_NAME}:${BUILD_NUMBER}"
-        Container  = "khan-name"
+        IMAGE_NAME = 'sirajahmad77/fourubuntutry'          // Your Docker Hub repo
+        IMAGE_TAG  = "${IMAGE_NAME}:${BUILD_NUMBER}"   // Unique image per build
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 git url: 'https://github.com/sirajkhanfanzoo7788-star/fourubuntutry', branch: 'main'
@@ -43,14 +43,28 @@ pipeline {
             }
         }
 
-        stage('Docker container creationg') {
+        stage('Deploy to EKS (Auto-update App)') {
             steps {
-                sh "docker rm -f ${Container} || true"
-                sh "docker run -d --name ${Container} -p 3000:5000 ${IMAGE_TAG}"
-                sh "docker image prune -f"
-                echo "✅ Docker image pushed successfully"
+                script {
+                    retry(2) {
+                        sh """
+                            echo "Updating kubeconfig..."
+                            aws eks update-kubeconfig --region us-east-1 --name test-cluster
+
+                            echo "Applying Kubernetes manifests..."
+                            kubectl apply -f deployment.yaml
+                            kubectl apply -f service.yaml
+
+                            echo "Auto-updating app with new image..."
+                            kubectl set image deployment/awsubuntu-app awsubuntu=${IMAGE_TAG}
+
+                            echo "Waiting for rollout to finish..."
+                            kubectl rollout status deployment/awsubuntu-app --timeout=180s
+                        """
+                    }
+                }
             }
         }
+
     }
 }
-  

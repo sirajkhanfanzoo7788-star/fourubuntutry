@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fourubuntutry-app     # Deployment name used in Jenkins
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app:fourubuntu
+  template:
+    metadata:
+      labels:
+        app: fourubuntu
+    spec:
+      containers:
+      - name: fourubuntu        # Container name used in Jenkins
+        image: sirajahmad77/fourubuntutry:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
