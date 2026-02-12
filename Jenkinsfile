@@ -59,7 +59,8 @@ pipeline {
                             kubectl set image deployment/fourubuntutry-app fourubuntu=${IMAGE_TAG}
 
                             echo "Waiting for rollout to finish..."
-                            kubectl rollout status deployment/ fourubuntutry-app --timeout=180s
+                            kubectl rollout status deployment/fourubuntutry-app --timeout=180s
+
                         """
                     }
                 }
