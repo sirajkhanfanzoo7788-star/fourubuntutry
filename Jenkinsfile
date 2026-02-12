@@ -56,7 +56,7 @@ pipeline {
                             kubectl apply -f service.yaml
 
                             echo "Auto-updating app with new image..."
-                            kubectl set image deployment/ fourubuntutry-app fourubuntutry=${IMAGE_TAG}
+                            kubectl set image deployment/fourubuntutry-app fourubuntutry=${IMAGE_TAG}
 
                             echo "Waiting for rollout to finish..."
                             kubectl rollout status deployment/ fourubuntutry-app --timeout=180s
